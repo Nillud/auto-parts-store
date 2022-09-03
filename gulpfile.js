@@ -20,6 +20,8 @@ export const styles = () => {
   return gulp.src('source/less/style.less', { sourcemaps: true })
     .pipe(plumber())
     .pipe(less())
+    .pipe(gulp.dest('source/css', { sourcemaps: '.' }))
+    .pipe(less())
     .pipe(postcss([
       autoprefixer(),
       csso()
@@ -38,7 +40,6 @@ const html = () => {
   }
 
   return gulp.src('source/*.html')
-    .pipe(inject(gulp.src('build/img/sprite.svg'), { transform: fileContents }))
     .pipe(htmlmin({ collapseWhitespace: true }))
     .pipe(gulp.dest('build'));
 }
@@ -92,16 +93,16 @@ const createWebp = () => {
 //     .pipe(gulp.dest('build/img'));
 // }
 
-// const copy = (done) => {
-//   gulp.src([
-//     'source/fonts/*.{woff2,woff}',
-//     'source/*.ico',
-//   ], {
-//     base: 'source'
-//   })
-//     .pipe(gulp.dest('build'))
-//   done();
-// }
+const copy = (done) => {
+  gulp.src([
+    'source/fonts/*.{woff2,woff}',
+    'source/*.ico',
+  ], {
+    base: 'source'
+  })
+    .pipe(gulp.dest('build'))
+  done();
+}
 
 // Clean
 
@@ -145,7 +146,7 @@ const watcher = () => {
 
 export const build = gulp.series(
   clean,
-  // copy,
+  copy,
   optimizeImages,
   // prepareSvgs,
   gulp.parallel(
