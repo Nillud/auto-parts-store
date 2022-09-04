@@ -19,14 +19,15 @@ import inject from 'gulp-inject';
 export const styles = () => {
   return gulp.src('source/less/style.less', { sourcemaps: true })
     .pipe(plumber())
-    .pipe(less())
-    .pipe(gulp.dest('source/css', { sourcemaps: '.' }))
+    // .pipe(less())
+    // .pipe(gulp.dest('source/css', { sourcemaps: '.' }))
     .pipe(less())
     .pipe(postcss([
       autoprefixer(),
       csso()
     ]))
     .pipe(rename('style.min.css'))
+    .pipe(gulp.dest('source/css', { sourcemaps: '.' }))
     .pipe(gulp.dest('build/css', { sourcemaps: '.' }))
     .pipe(browser.stream());
 }
